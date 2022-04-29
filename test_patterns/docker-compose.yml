@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  database:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: test_patterns
+    container_name: test_patterns
+    ports:
+      - "5432:5432"
