@@ -1,10 +1,10 @@
-import Item from "./Item";
+import Product from "./Product";
 
 export default class OrderItem {
-	item: Item;
+	item: Product;
 	amount: number;
 
-	constructor({ item, amount }: { item: Item; amount: number }) {
+	constructor({ item, amount }: { item: Product; amount: number }) {
 		this.item = item;
 		this.amount = amount;
 	}
