@@ -2,6 +2,8 @@ import Order from "../../domain/entity/Order";
 import { IOrderRepository } from "../../domain/repository/OrderRepository";
 import { IProductRepository } from "../../domain/repository/ProductRepository";
 import { IVoucherRepository } from "../../domain/repository/VoucherRepository";
+import PlaceOrderInput from "./PlaceOrderInput";
+import PlaceOrderOutput from "./PlaceOrderOutput";
 
 export default class PlaceOrder {
 	private productRepository;
@@ -18,32 +20,24 @@ export default class PlaceOrder {
 		this.orderRepository = orderRepository;
 	}
 
-	execute({
-		cpf,
-		items,
-		voucherCode,
-	}: {
-		cpf: string;
-		items: { id: number; amount: number }[];
-		voucherCode?: string;
-	}) {
-		const order = new Order({ cpf });
-		items.forEach(item => {
+	execute(placeOrderInput: PlaceOrderInput): PlaceOrderOutput {
+		const order = new Order({ cpf: placeOrderInput.cpf });
+		placeOrderInput.items.forEach(item => {
 			const product = this.productRepository.getProductById({ id: item.id });
 			if (!product) throw new Error('Product not found');
 
 			order.addProduct({ product, amount: item.amount });
 		});
-		if (voucherCode) {
-			const voucher = this.voucherRepository.getVoucherByCode({ code: voucherCode });
+		if (placeOrderInput.voucherCode) {
+			const voucher = this.voucherRepository.getVoucherByCode({ code: placeOrderInput.voucherCode });
 			if (voucher) {
 				order.addVoucher({ voucher });
 			}
 		}
 		this.orderRepository.saveOrder({ order });
-		return {
+		return  new PlaceOrderOutput({
 			total: order.getTotalValue(),
 			freightTotal: order.getFreightValue(),
-		}
+		});
 	}
 }
