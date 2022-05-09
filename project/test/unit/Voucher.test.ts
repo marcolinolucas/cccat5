@@ -1,4 +1,4 @@
-import Voucher from "../src/Voucher";
+import Voucher from "../../src/domain/entity/Voucher";
 
 test('When create a voucher, expect return correctly', function () {
 	const voucher = new Voucher({ code: 'BACK10', percentage: 10 });

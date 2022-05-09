@@ -1,4 +1,4 @@
-import Freight from "../src/Freight";
+import Freight from "../../src/domain/entity/Freight";
 
 test('When create freight with item, expect calculate price correctly', function () {
 	const freight = new Freight();

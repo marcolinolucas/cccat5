@@ -1,4 +1,4 @@
-import Cpf from "../src/Cpf";
+import Cpf from "../../src/domain/entity/Cpf";
 
 test('When cpf is empty string, expect throw invalid cpf', function () {
 	expect(() => new Cpf('')).toThrow(new Error('Invalid cpf'));

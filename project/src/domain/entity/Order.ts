@@ -11,31 +11,27 @@ export default class Order {
 	issueDate: Date;
 	freight: Freight;
 
-	constructor({
-		cpf,
-		issueDate = new Date(),
-		voucher,
-	}: {
-		cpf: string;
-		issueDate?: Date,
-		voucher?: Voucher;
-	}) {
+	constructor({ cpf, issueDate = new Date() }: { cpf: string; issueDate?: Date; }) {
 		this.cpf = new Cpf(cpf);
 		this.issueDate = issueDate;
 		this.orderItems = [];
 		this.freight = new Freight();
-		if (voucher && voucher.isExpired({ date: issueDate })) throw new Error('Invalid voucher');
-		this.voucher = voucher;
 	}
 
-	addItem({ item, amount }: { item: Product, amount: number }) {
-		const orderItem = new OrderItem({ item, amount });
+	addProduct({ product, amount }: { product: Product, amount: number }) {
+		const orderItem = new OrderItem({ item: product, amount });
 		this.orderItems.push(orderItem);
 		this.freight.addItem({
-			volume: item.getVolume(),
-			density: item.getDensity(),
+			volume: product.getVolume(),
+			density: product.getDensity(),
 			amount,
 		})
+	}
+
+	addVoucher({ voucher }: { voucher: Voucher }) {
+		if (!this.voucher && !voucher.isExpired({ date: this.issueDate })) {
+			this.voucher = voucher;
+		}
 	}
 
 	getTotalValue() {

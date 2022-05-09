@@ -1,22 +1,26 @@
 import Dimension from "./Dimension";
 
-export default class Item {
+export default class Product {
+	id: number;
 	description: string;
 	price: number;
 	dimension?: Dimension;
 	weight?: number;
 
 	constructor({
+		id,
 		description,
 		price,
 		dimension,
 		weight,
 	}: {
+		id: number;
 		description: string;
 		price: number;
 		dimension?: Dimension;
 		weight?: number;
 	}) {
+		this.id = id;
 		this.description = description;
 		this.price = price;
 		this.dimension = dimension;

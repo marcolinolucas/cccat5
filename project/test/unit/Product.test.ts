@@ -1,5 +1,5 @@
-import Dimension from "../src/Dimension";
-import Product from "../src/Product";
+import Dimension from "../../src/domain/entity/Dimension";
+import Product from "../../src/domain/entity/Product";
 
 test('When create product with dimension, expect to return correctly volume', function () {
 	const productDimension = new Dimension({
@@ -8,6 +8,7 @@ test('When create product with dimension, expect to return correctly volume', fu
 		depth:  10,
 	})
 	const product = new Product({
+		id: 1,
 		description: 'some description',
 		price: 10.90,
 		dimension: productDimension,

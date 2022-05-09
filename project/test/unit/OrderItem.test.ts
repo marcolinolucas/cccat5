@@ -1,8 +1,9 @@
-import Product from "../src/Product";
-import OrderItem from "../src/OrderItem";
+import Product from "../../src/domain/entity/Product";
+import OrderItem from "../../src/domain/entity/OrderItem";
 
 test('When item with amount, expect return total value correctly', function () {
 	const item = new Product({
+		id: 1,
 		description: 'description of item',
 		price: 10,
 		weight: 3,

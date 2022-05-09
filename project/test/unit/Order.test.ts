@@ -1,7 +1,7 @@
-import Product from "../src/Product";
-import Order from "../src/Order";
-import Voucher from "../src/Voucher";
-import Dimension from "../src/Dimension";
+import Product from "../../src/domain/entity/Product";
+import Order from "../../src/domain/entity/Order";
+import Voucher from "../../src/domain/entity/Voucher";
+import Dimension from "../../src/domain/entity/Dimension";
 
 test('When pass invalid cpf to order, expect throw invalid cpf', function () {
 	expect(() => new Order({ cpf: '11111111111' })).toThrow(new Error('Invalid cpf'));
@@ -15,8 +15,9 @@ test('When pass valid cpf to order, expect return total value as 0', function ()
 
 test('When pass many products, expect return correctly total value with freight', function () {
 	const order = new Order({ cpf: '570.251.630-31' });
-	order.addItem({
-		item: new Product({
+	order.addProduct({
+		product: new Product({
+			id: 1,
 			description: 'first product',
 			price: 100,
 			dimension: new Dimension({
@@ -28,8 +29,9 @@ test('When pass many products, expect return correctly total value with freight'
 		}),
 		amount: 1,
 	});
-	order.addItem({
-		item: new Product({
+	order.addProduct({
+		product: new Product({
+			id: 2,
 			description: 'second product',
 			price: 20,
 			dimension: new Dimension({
@@ -41,8 +43,9 @@ test('When pass many products, expect return correctly total value with freight'
 		}),
 		amount: 7,
 	});
-	order.addItem({
-		item: new Product({
+	order.addProduct({
+		product: new Product({
+			id: 3,
 			description: 'third product',
 			price: 500,
 			dimension: new Dimension({
@@ -64,9 +67,11 @@ test('When pass a voucher, expect return correctly total value with discount', f
 		code: 'BACK10',
 		percentage: 10,
 	});
-	const order = new Order({ cpf: '570.251.630-31', voucher });
-	order.addItem({
-		item: new Product({
+	const order = new Order({ cpf: '570.251.630-31' });
+	order.addVoucher({ voucher });
+	order.addProduct({
+		product: new Product({
+			id: 1,
 			description: 'second product',
 			price: 300,
 			dimension: new Dimension({
@@ -83,19 +88,11 @@ test('When pass a voucher, expect return correctly total value with discount', f
 	expect(order.getFreightValue()).toBe(150);
 });
 
-test('When pass a expired voucher, expect throw invalid voucher', function () {
-	const voucher = new Voucher({
-		code: 'BACK10',
-		percentage: 10,
-		expireAt: new Date('2022-03-30T06:45:24.413Z'),
-	});
-	expect(() => new Order({ cpf: '570.251.630-31', voucher })).toThrow(new Error('Invalid voucher'));
-});
-
 test('When order total is lower than minimal freight value, expect add min value of freight at total', function () {
 	const order = new Order({ cpf: '570.251.630-31' });
-	order.addItem({
-		item: new Product({
+	order.addProduct({
+		product: new Product({
+			id: 1,
 			description: 'second product',
 			price: 10,
 			dimension: new Dimension({
